@@ -1,10 +1,5 @@
-const knex = require('knex')({
-    client:'mysql',
-    connection:{
-        host: process.env.DB_HO,
-        port:3306,
-        user: process.env.DB_USER,
-        password: process.env.DB_PASSWORD,
-        database: process.env.DB_DATABASE
-    }
-})
+import knex from "knex";
+import * as config  from "../knexfile";
+const db = knex(config);
+
+export default db;
