@@ -3,11 +3,11 @@ import db from '../../database'
 import { IRepository, PaginateReturnType, Pagination } from '../interface'
 
 class AddressRepository implements IRepository<Address, any> {
-  async getById(id_address: number): Promise<Address | undefined> {
+  async getById(id: number): Promise<Address | undefined> {
     let address = undefined
     try {
       const addressFounded = await db
-        .raw('SELECT * FROM address WHERE id_address = ?', [id_address])
+        .raw('SELECT * FROM address WHERE id = ?', [id])
         .debug(true)
       address = addressFounded[0][0]
     } catch (e) {
@@ -16,12 +16,12 @@ class AddressRepository implements IRepository<Address, any> {
     return address
   }
 
-  async update(id_address: number, data: Partial<Address>): Promise<any> {
+  async update(id: number, data: Partial<Address>): Promise<any> {
     let address = undefined
     try {
       const updateAddress = await db
         .raw(
-          'UPDATE address SET zip_code = ?, state = ?, city = ?, street = ?, number = ?, comp = ? WHERE id_address = ?',
+          'UPDATE address SET zip_code = ?, state = ?, city = ?, street = ?, number = ?, comp = ? WHERE id = ?',
           [
             //seguir respectivamente conforme foi digitado no SET
             data.zip_code as string,
@@ -30,7 +30,7 @@ class AddressRepository implements IRepository<Address, any> {
             data.street as string,
             data.number as number,
             data.comp ? data.comp : '',
-            id_address,
+            id,
           ],
         )
         .debug(true)
@@ -44,12 +44,10 @@ class AddressRepository implements IRepository<Address, any> {
     return address
   }
 
-  async remove(id_address: number): Promise<void> {
+  async remove(id: number): Promise<void> {
     let address: any = undefined
     try {
-      const deleteAddress = db.raw('DELETE FROM address WHERE id_address = ?', [
-        id_address,
-      ])
+      const deleteAddress = db.raw('DELETE FROM address WHERE id = ?', [id])
       //não precisa informar a posição dentro do array
       address = deleteAddress
     } catch (e) {
@@ -62,8 +60,18 @@ class AddressRepository implements IRepository<Address, any> {
   ): Promise<PaginateReturnType<Address>> {
     throw new Error('Not Implemented yet')
   }
-  async create(data: any): Promise<Address> {
-    throw new Error('Not Implemented yet')
+  async create(data: Partial<Address>): Promise<Address | undefined> {
+    let address = undefined
+    try {
+      const createAddress =
+        await db.raw(`INSERT INTO address ( city, comp, zip_code, street, number, state)
+    VALUES('${data.city}', '${data.comp}', '${data.zip_code}','${data.street}','${data.number}','${data.state}')
+    `)
+      address = createAddress[0][0]
+    } catch (e) {
+      console.error(e)
+    }
+    return address
   }
 }
 export default new AddressRepository()

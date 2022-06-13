@@ -1,5 +1,5 @@
 export type Address = {
-  id_address:number
+  id:number
   city: string
   comp: string | null
   zip_code: string

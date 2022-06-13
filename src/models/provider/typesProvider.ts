@@ -3,7 +3,9 @@ export type Provider = {
   id_address: number
   name: string
   name_fant: string
-  cnpj: number
-  phone_number: number
+  cnpj: string
+  phone_number: string
+  cel: string;
   email: string
+  address?: string | number 
 }

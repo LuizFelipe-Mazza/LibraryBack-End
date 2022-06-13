@@ -5,11 +5,29 @@ import { Address, AddressRepository } from '../models/address'
 import { DbError } from '../helpers/dbError'
 
 class addressController {
+  async createAddress(req: Request<Address>, res: Response): Promise<void> {
+    const service = new AddressService(AddressRepository)
+    const data = req.body
+
+    try {
+      await service.create(data)
+      res.status(200).json('Endereço cadastrado com sucesso')
+      
+    } catch (e) {
+      if (e instanceof HttpError) {
+        res.status(e.status).json(e.message)
+      }
+      console.error(e)
+      res.status(500).json('Erro Não Indentificado')
+    }
+    return data
+  }
+
   async address(req: Request<Address>, res: Response): Promise<void> {
-    const { id_address } = req.params
+    const { id } = req.params
     const service = new AddressService(AddressRepository)
     try {
-      let address = await service.get(id_address)
+      let address = await service.get(id)
 
       res.status(200).json(address)
     } catch (e) {
@@ -22,15 +40,17 @@ class addressController {
   }
 
   async UpdateAddress(
-    req: Request<Address['id_address'], Address>,res: Response,): Promise<void> {
-    const id_address = req.params
+    req: Request<Address['id'], Address>,
+    res: Response,
+  ): Promise<void> {
+    const id = req.params
 
     const data = req.body
 
     const service = new AddressService(AddressRepository)
 
     try {
-      let address = await service.update(id_address, data)
+      let address = await service.update(id, data)
       res.status(200).json(address)
     } catch (e) {
       if (e instanceof HttpError) {
@@ -42,7 +62,9 @@ class addressController {
   }
 
   async deleteAddress(
-    req: Request<Address['id_address'], Address>,res: Response,): Promise<void> {
+    req: Request<Address['id'], Address>,
+    res: Response,
+  ): Promise<void> {
     const id = req.params
 
     const service = new AddressService(AddressRepository)

@@ -1,5 +1,5 @@
-import repository from './repository'
-export { Address } from './types'
+import repository from '../address/repository'
+export { Address } from '../address/types'
 
 export const AddressRepository = repository
 

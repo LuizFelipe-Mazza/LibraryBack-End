@@ -4,7 +4,7 @@ import 'dotenv/config';
 // Update with your config settings.
 
  const config: Knex.Config = {
-  client: 'mysql',
+  client: 'mysql2',
   connection: {
     host: process.env.DB_HOST,
     database: process.env.DB_DATABASE,
