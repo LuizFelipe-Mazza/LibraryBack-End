@@ -1,22 +1,21 @@
+
 import { Provider } from '../../models/provider/typesProvider';
 import { DbError } from '../../helpers/dbError';
 import {HttpError} from '../../helpers/httpError';
-import ProviderRepository from '../../models/provider/repositoryProvider';
 import { IRepository } from '@models/interface';
 
 export class ProviderService {
   private repository: IRepository<Provider, Partial<Provider>>
 
-  constructor(repository: typeof ProviderRepository) {
+  constructor(repository:IRepository<Provider, Partial<Provider>>) {
     this.repository = repository
   }
-
   async get(id: number) {
     let provider = await this.repository.getById(id);
     if (!provider) {
       throw new HttpError({message:'Fornecedor não encontrado', status:404})
     }
-    return provider;
+   return provider
   }
 
   async update(data:Partial<Provider>){
@@ -34,5 +33,12 @@ export class ProviderService {
 
     return 
    
+  }
+
+  async create(data:Partial<Provider>){
+    if(!data.name ||!data.name_fant ||!data.id_address ||!data.email ||!data.cnpj ||!data.phone_number ||!data.cel){
+      throw new HttpError({message:'Fornecedor não Cadastrado', status:404})
+    }
+   await this.repository.create(data);
   }
 }
