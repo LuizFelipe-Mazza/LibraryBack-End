@@ -1,8 +1,8 @@
 {
     "compilerOptions": {
       "target": "ES6",
-      "module": "commonjs",
-      "rootDir": ".",
+      "module":"CommonJS",
+      "rootDir": "./",
       "outDir": "./dist/",
       "baseUrl": "./src/",
       "paths": {
@@ -31,6 +31,7 @@
       "experimentalDecorators": true,
       "emitDecoratorMetadata": true,
       "forceConsistentCasingInFileNames": true,
+      "incremental": true,
       "resolveJsonModule": true
     },
     "exclude": [
