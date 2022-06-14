@@ -11,4 +11,5 @@ router.delete('/remove/:id', addressController.deleteAddress);
 // Provider Area
 router.post('/createprovider', providerController.createProvider);
 router.get('/showprovider/:id', providerController.provider);
+router.get('/provider/paginate', providerController.paginate);
 export default router;
