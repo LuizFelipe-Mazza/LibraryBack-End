@@ -12,7 +12,6 @@ class addressController {
     try {
       await service.create(data)
       res.status(200).json('Endereço cadastrado com sucesso')
-      
     } catch (e) {
       if (e instanceof HttpError) {
         res.status(e.status).json(e.message)
