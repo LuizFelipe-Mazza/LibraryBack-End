@@ -1,5 +1,5 @@
 import db from '../../database'
-import { IRepository, PaginateReturnType, Pagination } from '../interface'
+import { IRepository, Pagination } from '../interface'
 import { Provider } from './typesProvider'
 
 class ProviderRepository implements IRepository<Provider, Partial<Provider>> {
@@ -53,10 +53,27 @@ class ProviderRepository implements IRepository<Provider, Partial<Provider>> {
     }
     return provider
   }
-  async paginate(
-    params: Pagination<Partial<Provider>>,
-  ): Promise<PaginateReturnType<Provider>> {
-    throw new Error('Not Implemented yet')
+  async paginate(params: Pagination): Promise<Provider[]> {
+    console.log(params)
+    try {
+      const query = db.select('*').from('provider').leftJoin('address',function(){
+        this.on('id_address', '=', 'provider.id_address')
+        .orOn('id_address', '=','provider.id')
+      }) 
+      Object.entries(params.filter).forEach(([key, value]) => {
+        query.andWhereILike(key, `%${value}%`)//for each vai ser um objeto {"name":"Example"}
+        // vai pegar os todos o itens dos objetos e buscando neles as chaves e valores
+        // e vai adicionar o LIKE
+      })
+      const paginate = await query
+        .limit(params.pageSize)
+        .offset((params.page - 1) * params.pageSize)
+      console.log(params)
+      return paginate
+    } catch (e) {
+      console.error(e)
+      throw new Error('houve um erro')
+    }
   }
 
   async create(data: Partial<Provider>): Promise<Provider | undefined> {
