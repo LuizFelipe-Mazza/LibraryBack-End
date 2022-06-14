@@ -1,6 +1,6 @@
 import { Address } from './types'
 import db from '../../database'
-import { IRepository, PaginateReturnType, Pagination } from '../interface'
+import { IRepository, Pagination } from '../interface'
 
 class AddressRepository implements IRepository<Address, any> {
   async getById(id: number): Promise<Address | undefined> {
@@ -56,8 +56,7 @@ class AddressRepository implements IRepository<Address, any> {
     return address
   }
   async paginate(
-    params: Pagination<Partial<Address>>,
-  ): Promise<PaginateReturnType<Address>> {
+    params: Pagination): Promise<Address[]> {
     throw new Error('Not Implemented yet')
   }
   async create(data: Partial<Address>): Promise<Address | undefined> {
