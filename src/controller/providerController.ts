@@ -77,17 +77,22 @@ class providerController {
   }
 
   async paginate(req: Request<Provider>, res: Response): Promise<void> {
+    console.log(req.query);
     const params:Pagination = {
       pageSize:Number(req.query.pageSize),
       page:Number(req.query.page),
-      filter:JSON.parse(String(req.query.filter))
+      filter:req.query.filter != '{}' ? JSON.parse(String(req.query.filter)) : {}
     };
     try {
     let providers = await service.paginate(params)
+    
       res.status(200).json(providers)
     } catch (e) {
       if (e instanceof HttpError) {
         res.status(e.status).json(e.message)
+      }
+      if(params.filter === {}){
+        res.status(400).json('Nenhumm filtro inserido');
       }
       console.error(e)
       res.status(500).json('Erro Não Indentificado')

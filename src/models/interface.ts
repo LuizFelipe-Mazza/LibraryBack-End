@@ -3,6 +3,7 @@ export interface IRepository<T, D> {
   update: (id: number, data: Partial<D>) => Promise<T>
   remove: (id: number) => Promise<void>
   paginate: (params: Pagination) => Promise<T[]>
+  total?:(params: Pagination) => Promise<number>
   create: (data: D) => Promise<T | undefined>
 }
 

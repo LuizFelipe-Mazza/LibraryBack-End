@@ -56,12 +56,18 @@ class ProviderRepository implements IRepository<Provider, Partial<Provider>> {
   async paginate(params: Pagination): Promise<Provider[]> {
     console.log(params)
     try {
-      const query = db.select('*').from('provider').leftJoin('address',function(){
-        this.on('id_address', '=', 'provider.id_address')
-        .orOn('id_address', '=','provider.id')
-      }) 
+      const query = db
+        .select('*')
+        .from('provider')
+        .leftJoin('address', function () {
+          this.on('id_address', '=', 'provider.id_address').orOn(
+            'id_address',
+            '=',
+            'provider.id',
+          )
+        })
       Object.entries(params.filter).forEach(([key, value]) => {
-        query.andWhereILike(key, `%${value}%`)//for each vai ser um objeto {"name":"Example"}
+        query.andWhereILike(key, `%${value}%`) //for each vai ser um objeto {"name":"Example"}
         // vai pegar os todos o itens dos objetos e buscando neles as chaves e valores
         // e vai adicionar o LIKE
       })
@@ -74,6 +80,22 @@ class ProviderRepository implements IRepository<Provider, Partial<Provider>> {
       console.error(e)
       throw new Error('houve um erro')
     }
+  }
+async total(params: Pagination): Promise<number> {
+    const query = db
+      .count('* as total')
+      .from('provider')
+      .leftJoin('address', function () {
+        this.on('id_address', '=', 'provider.id_address')
+        .orOn('id_address','=','provider.id',
+        )
+      })
+    Object.entries(params.filter).forEach(([key, value]) => {
+      query.andWhereILike(key, `%${value}%`)
+    })
+    const totalResult = await query
+    console.log(totalResult);
+    return Number(totalResult[0].total)
   }
 
   async create(data: Partial<Provider>): Promise<Provider | undefined> {

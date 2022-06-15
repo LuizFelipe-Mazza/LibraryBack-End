@@ -6,9 +6,9 @@ import { HttpError } from '../../helpers/httpError'
 import { IRepository } from '@models/interface'
 
 export class ProviderService {
-  private repository: IRepository<Provider, Partial<Provider>>
+  private repository: Required < IRepository<Provider, Partial<Provider>>>
 
-  constructor(repository: IRepository<Provider, Partial<Provider>>) {
+  constructor(repository: Required <IRepository<Provider, Partial<Provider>>>) {
     this.repository = repository
   }
   async get(id: number) {
@@ -62,9 +62,10 @@ export class ProviderService {
     params.pageSize = params.pageSize || 10
     params.filter = params.filter ?? {}
     const providers = await this.repository.paginate(params)
+    const total = await this.repository.total(params)
     return {
       results: providers,
-      total: 0,
+      total: total,
       pageSize: params.pageSize,
       current: params.page,
       lastPage: 2, // TODO: CALCULAR QUAL A ÚTILMA PÁGINA COM BASE NO TOTAL E NO TAMANHO DA PÁIGINA 'pageSize'
