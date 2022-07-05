@@ -20,6 +20,6 @@ router.get('/provider/paginate', providerController.paginate);
 router.get('/user/:id', userController.user);
 router.put('/updateuser', userController.UpdateUser);
 router.post('/createuser', userController.createuser);
-router.delete('/deleteuser', userController.deleteUser);
+router.delete('/deleteuser/:id', userController.deleteUser);
 
 export default router;
