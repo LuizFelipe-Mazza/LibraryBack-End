@@ -1,9 +1,10 @@
-import { IRepository, Pagination } from '@models/interface'
+import { IRepository, Pagination } from '../interface'
 import { IUser } from './types'
 import db from '../../database'
-import { DbError } from '@helpers/dbError'
+import { DbError } from '../../helpers/dbError'
 
-export class User implements IRepository<IUser, Partial<IUser>> {
+ class User implements IRepository<IUser, Partial<IUser>> {
+
   private readonly tableName: string
   constructor() {
     this.tableName = 'user'
@@ -117,3 +118,5 @@ export class User implements IRepository<IUser, Partial<IUser>> {
     return provider
   }
 }
+const UserRepository = new User()
+export default UserRepository
