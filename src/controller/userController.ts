@@ -5,9 +5,10 @@ import { DbError } from '../helpers/dbError'
 import { UserAuth } from '../services/Auth/service';
 import { IUser } from '../models/User/types';
 import UserRepository from '../models/User/repository';
+import { Encrypter } from '../helpers/encrypter';
+import { tokenGenerator } from '../helpers/tokenGenerator';
 
-
-const service = new UserAuth(UserRepository)
+const service = new UserAuth({repository:UserRepository,token:tokenGenerator, encrypter: new Encrypter})
 
 class userController {
   service: UserAuth
@@ -30,7 +31,6 @@ class userController {
 
   async UpdateUser(req: Request<IUser>, res: Response): Promise<void> {
     const data = req.params
-    const service = new UserAuth(UserRepository)
 
     try {
       let user = await service.update(data)
@@ -46,7 +46,6 @@ class userController {
 
   async deleteUser(req: Request<IUser>, res: Response): Promise<void> {
     const data = req.params
-    const service = new UserAuth(UserRepository)
     try {
       await service.delete(data.id)
       res.status(200).json('Conta deletada')
@@ -60,7 +59,6 @@ class userController {
     }
   }
   async createuser(req: Request<IUser>, res: Response): Promise<void> {
-    const service = new UserAuth(UserRepository)
     const data = req.body
 
     try {
