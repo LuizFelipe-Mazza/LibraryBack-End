@@ -1,7 +1,7 @@
 import { Pagination } from './../models/interface';
 import { HttpError } from '../helpers/httpError'
 import { ProviderService } from '../services/Provider/serviceProvider'
-import { Provider } from '@models/provider/typesProvider'
+import { Provider } from '../models/provider/typesProvider'
 import { Request, Response } from 'express'
 import ProviderRepository from '../models/provider/repositoryProvider'
 import { DbError } from '../helpers/dbError'
@@ -81,7 +81,7 @@ class providerController {
     const params:Pagination = {
       pageSize:Number(req.query.pageSize),
       page:Number(req.query.page),
-      filter:req.query.filter != '{}' ? JSON.parse(String(req.query.filter)) : {}
+      filter:req.query.filter != '{}' && req.query.filter != undefined ? JSON.parse(String(req.query.filter)) : {}
     };
     try {
     let providers = await service.paginate(params)
