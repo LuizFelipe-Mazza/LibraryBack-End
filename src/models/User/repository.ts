@@ -1,15 +1,24 @@
-import { IRepository, Pagination } from '../interface'
+import { UInterface } from './authInterface'
+import { Pagination } from '../interface'
 import { IUser } from './types'
 import db from '../../database'
 import { DbError } from '../../helpers/dbError'
 
- class User implements IRepository<IUser, Partial<IUser>> {
-
+class UserRepository implements UInterface<IUser, Partial<IUser>> {
   private readonly tableName: string
   constructor() {
     this.tableName = 'user'
   }
 
+  async getByEmail(email: string): Promise<IUser> {
+    const founded = await db
+      .select('*')
+      .from('user')
+      .where('email', email)
+      .first()
+
+    return founded
+  }
   async getById(id: number): Promise<IUser | undefined> {
     let data = undefined
     try {
@@ -84,11 +93,11 @@ import { DbError } from '../../helpers/dbError'
     const query = db
       .count('* as total')
       .from(this.tableName)
-      .leftJoin('address', function () {
-        this.on('id_address', '=', 'provider.id_address').orOn(
+      .leftJoin('user', function () {
+        this.on('id_address', '=', 'user.id_address').orOn(
           'id_address',
           '=',
-          'provider.id',
+          'user.id',
         )
       })
     Object.entries(params.filter).forEach(([key, value]) => {
@@ -118,5 +127,6 @@ import { DbError } from '../../helpers/dbError'
     return provider
   }
 }
-const UserRepository = new User()
-export default UserRepository
+const Repository = new UserRepository()
+export default Repository
+
