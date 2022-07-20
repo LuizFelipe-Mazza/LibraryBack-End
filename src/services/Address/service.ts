@@ -1,7 +1,7 @@
-import { Address } from '@models/address/types';
+import { Address } from '../../models/address/types';
 import { DbError } from '../../helpers/dbError';
 import {HttpError} from '../../helpers/httpError';
-import { IRepository } from '@models/interface';
+import { IRepository } from '../../models/interface';
 
 export class AddressService {
   private repository: IRepository<Address, Partial<Address>>

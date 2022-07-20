@@ -3,7 +3,7 @@ import { Pagination, PaginateReturnType } from './../../models/interface'
 import { Provider } from '../../models/provider/typesProvider'
 import { DbError } from '../../helpers/dbError'
 import { HttpError } from '../../helpers/httpError'
-import { IRepository } from '@models/interface'
+import { IRepository } from '../../models/interface'
 
 export class ProviderService {
   private repository: Required < IRepository<Provider, Partial<Provider>>>

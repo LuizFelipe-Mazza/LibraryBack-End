@@ -5,12 +5,6 @@
       "rootDir": "./",
       "outDir": "./dist/",
       "baseUrl": "./src/",
-      "paths": {
-        "@controllers/*": ["controllers/*"],
-        "@models/*": ["models/*"],
-        "@helpers/*": ["helpers/*"],
-        "@services/*": ["services/*"],
-      },
       "importHelpers": true,
       "strict": true,
       "noImplicitAny": false,

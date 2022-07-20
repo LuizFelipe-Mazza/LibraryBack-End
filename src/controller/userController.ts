@@ -1,23 +1,25 @@
 import { Pagination } from './../models/interface';
 import { HttpError } from '../helpers/httpError'
-import { ProviderService } from '../services/Provider/serviceProvider'
-import { Provider } from '../models/provider/typesProvider'
 import { Request, Response } from 'express'
-import ProviderRepository from '../models/provider/repositoryProvider'
 import { DbError } from '../helpers/dbError'
+import { UserAuth } from '../services/Auth/service';
+import { IUser } from '../models/User/types';
+import UserRepository from '../models/User/repository';
+import { Encrypter } from '../helpers/encrypter';
+import { tokenGenerator } from '../helpers/tokenGenerator';
 
-const service = new ProviderService(ProviderRepository)
+const service = new UserAuth({repository:UserRepository,token:tokenGenerator, encrypter: new Encrypter})
 
-class providerController {
-  service: ProviderService
+class userController {
+  service: UserAuth
   constructor() {
     this.service = service
   }
-  async provider(req: Request<Provider>, res: Response): Promise<void> {
-    const { id } = req.params;
+  async user(req: Request<IUser>, res: Response): Promise<void> {
+    const {id} = req.params;
     try {
-      let provider = await service.get(id)
-      res.status(200).json(provider)
+      let user = await service.get(id)
+      res.status(200).json(user)
     } catch (e) {
       if (e instanceof HttpError) {
         res.status(e.status).json(e.message)
@@ -27,13 +29,12 @@ class providerController {
     }
   }
 
-  async UpdateProvider(req: Request<Provider>, res: Response): Promise<void> {
+  async UpdateUser(req: Request<IUser>, res: Response): Promise<void> {
     const data = req.params
-    const service = new ProviderService(ProviderRepository)
 
     try {
-      let provider = await service.update(data)
-      res.status(200).json(provider)
+      let user = await service.update(data)
+      res.status(200).json(user)
     } catch (e) {
       if (e instanceof HttpError) {
         res.status(e.status).json(e.message)
@@ -43,12 +44,11 @@ class providerController {
     }
   }
 
-  async deleteProvider(req: Request<Provider>, res: Response): Promise<void> {
+  async deleteUser(req: Request<IUser>, res: Response): Promise<void> {
     const data = req.params
-    const service = new ProviderService(ProviderRepository)
     try {
       await service.delete(data.id)
-      res.status(200).json('Endereço deletado')
+      res.status(200).json('Conta deletada')
       return
     } catch (e) {
       if (e instanceof DbError) {
@@ -58,8 +58,7 @@ class providerController {
       res.status(500).json('Erro Não Indentificado')
     }
   }
-  async createProvider(req: Request<Provider>, res: Response): Promise<void> {
-    const service = new ProviderService(ProviderRepository)
+  async createuser(req: Request<IUser>, res: Response): Promise<void> {
     const data = req.body
 
     try {
@@ -76,17 +75,17 @@ class providerController {
     return data
   }
 
-  async paginate(req: Request<Provider>, res: Response): Promise<void> {
+  async paginate(req: Request<IUser>, res: Response): Promise<void> {
     console.log(req.query);
     const params:Pagination = {
       pageSize:Number(req.query.pageSize),
       page:Number(req.query.page),
-      filter:req.query.filter != '{}' && req.query.filter != undefined ? JSON.parse(String(req.query.filter)) : {}
+      filter:req.query.filter != '{}' ? JSON.parse(String(req.query.filter)) : {}
     };
     try {
-    let providers = await service.paginate(params)
+    let users = await service.paginate(params)
     
-      res.status(200).json(providers)
+      res.status(200).json(users)
     } catch (e) {
       if (e instanceof HttpError) {
         res.status(e.status).json(e.message)
@@ -100,5 +99,5 @@ class providerController {
   }
 
 }
-const controller = new providerController()
+const controller = new userController()
 export default controller
