@@ -1,3 +1,4 @@
+import controllerAuth from "./controller/authController";
 import { Router } from "express";
 import addressController from './controller/addressController';
 import providerController from './controller/providerController'
@@ -18,8 +19,9 @@ router.get('/provider/paginate', providerController.paginate);
 
 // User Area
 router.get('/user/:id', userController.user);
-router.put('/updateuser', userController.UpdateUser);
+router.put('/updateuser/:id', userController.UpdateUser);
 router.post('/createuser', userController.createuser);
 router.delete('/deleteuser/:id', userController.deleteUser);
-
+// Validate Area
+router.post('/login', controllerAuth.user)
 export default router;
