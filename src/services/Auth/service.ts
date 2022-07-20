@@ -1,20 +1,39 @@
+import { UInterface } from './../../models/User/authInterface';
 import { DbError } from '../../helpers/dbError'
 import { HttpError } from '../../helpers/httpError'
-import { IRepository, PaginateReturnType, Pagination } from '@models/interface'
-import { IUser } from '@models/User/types'
-export class UserAuth {
-  private repository: IRepository<IUser, Partial<IUser>>
+import {PaginateReturnType, Pagination } from '../../models/interface'
 
-  constructor(repository: Required<IRepository<IUser, Partial<IUser>>>) {
-    this.repository = repository
+import { IEncrypter } from 'helpers';
+import { IUser } from 'models/User/types';
+import { UserAuthParams } from './login';
+export class UserAuth {
+  private repository: UInterface<IUser, Partial<IUser>>
+  private encrypter: IEncrypter
+
+  constructor(params:UserAuthParams) {
+    this.repository = params.repository
+    this.encrypter =  params.encrypter
   }
+
 
   async signIn(data: Partial<IUser>) {
     if (!data.email || !data.password) {
-      throw new DbError('Necessário e-mail e senha para entrar')
+      throw new HttpError({message:'Necessário e-mail e senha para entrar', status:400})
     }
-    await this.repository.create(data)
-  }
+    const user = this.repository.getByEmail(data.email)
+    if(!user){
+      throw new HttpError({message:'Usuário não encontrado', status:400})
+    }
+    
+     //encotrar o usuário por email
+     //retornar erro se o usuário não existir
+     //se o usuário existir verficar com o encrypter(compare) se a senha é válida
+     //caso a senha não seja válida, retornar erro
+     //caso a senha seja válida gerar Token com os dados de usuário(email, nome e id)
+     //retornar Token e informações de usuário(email, nome e persona_id)
+        return user
+    }
+    
 
   async get(id: number) {
     let user = await this.repository.getById(id)
@@ -50,7 +69,12 @@ export class UserAuth {
     ) {
       throw new HttpError({ message: 'Usuário não Cadastrado', status: 404 })
     }
-    await this.repository.create(data)
+    const userFounded = await this.repository.getByEmail(data.email)
+    if(userFounded && userFounded.active){
+      throw new HttpError({message:'E-mail ja cadastrado', status:400})
+    }
+    const hashedPassword = await this.encrypter.encrypt(data.password)
+    await this.repository.create({name:data.name, email:data.email, password:hashedPassword})
   }
 
   async paginate(params: Pagination): Promise<PaginateReturnType<IUser>> {
