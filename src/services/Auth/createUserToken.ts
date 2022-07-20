@@ -1,4 +1,4 @@
-import { IUser } from '@models/User'
+import { IUser } from '../../models/User/types'
 
 export type UserDTO = {
   id: IUser['id']
