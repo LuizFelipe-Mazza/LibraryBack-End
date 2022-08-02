@@ -60,11 +60,7 @@ class ProviderRepository implements IRepository<Provider, Partial<Provider>> {
         .select('*')
         .from('provider')
         .leftJoin('address', function () {
-          this.on('id_address', '=', 'provider.id_address').orOn(
-            'id_address',
-            '=',
-            'provider.id',
-          )
+          this.on('address.id', '=', 'provider.id_address')
         })
       Object.entries(params.filter).forEach(([key, value]) => {
         query.andWhereILike(key, `%${value}%`) //for each vai ser um objeto {"name":"Example"}
