@@ -7,7 +7,7 @@ class Publishing_company_Repository implements IRepository<Publishing_company, a
     let publishing_company = undefined
     try {
       const publishing_company_Founded = await db
-        .raw('SELECT * FROM address WHERE id = ?', [id])
+        .raw('SELECT * FROM publishing_company WHERE id = ?', [id])
         .debug(true)
       publishing_company = publishing_company_Founded[0][0]
     } catch (e) {
@@ -21,7 +21,7 @@ class Publishing_company_Repository implements IRepository<Publishing_company, a
     try {
       const updatePublish_company = await db
         .raw(
-          'UPDATE publish_company SET name = ?, state = ?, city = ?, road = ?, number = ?, telephone = ?, discrit = ?, site = ? WHERE id = ?',
+          'UPDATE publishing_company SET name = ?, state = ?, city = ?, road = ?, number = ?, telephone = ?, discrit = ?, site = ? WHERE id = ?',
           [
             //seguir respectivamente conforme foi digitado no SET
             data.name as string,
@@ -49,7 +49,7 @@ class Publishing_company_Repository implements IRepository<Publishing_company, a
   async remove(id: number): Promise<void> {
     let Publishing_company: any = undefined
     try {
-      const deletePublish_company = db.raw('DELETE FROM address WHERE id = ?', [id])
+      const deletePublish_company = db.raw('DELETE FROM publishing_company WHERE id = ?', [id])
       //não precisa informar a posição dentro do array
       Publishing_company = deletePublish_company
     } catch (e) {
@@ -65,7 +65,7 @@ class Publishing_company_Repository implements IRepository<Publishing_company, a
     let Publishing_company = undefined
     try {
       const createPublish_company =
-        await db.raw(`INSERT INTO address ( city, number, state, discrict, site,name, telephone,road)
+        await db.raw(`INSERT INTO publishing_company ( city, number, state, discrict, site,name, telephone,road)
     VALUES('${data.city}', '${data.discrict}', '${data.road}','${data.telephone}','${data.number}','${data.state}','${data.site}')
     `)
       Publishing_company = createPublish_company[0][0]
