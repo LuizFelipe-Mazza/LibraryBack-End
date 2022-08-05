@@ -3,6 +3,8 @@ import { Router } from "express";
 import addressController from './controller/addressController';
 import providerController from './controller/providerController'
 import userController from './controller/userController'
+import bookController from './controller/bookController'
+import publishingCompanyController from './controller/publishingCompanyController'
 
 const router = Router();
 router.get('/address/:id', addressController.address);
@@ -24,4 +26,18 @@ router.post('/createuser', userController.createuser);
 router.delete('/deleteuser/:id', userController.deleteUser);
 // Validate Area
 router.post('/login', controllerAuth.user)
+//publishing_company Area
+router.get('/publishingcompany/:id', publishingCompanyController.Publishing_company);
+router.put('/updatepublishingcompany/:id', publishingCompanyController.UpdatePublishing_company);
+router.post('/createpublishingcompany', publishingCompanyController.createPublishingCompany);
+router.delete('/deletepublishingcompany/:id', publishingCompanyController.deletePublishing_company);
+
+// Book Area
+router.get('/book/:id', bookController.Book);
+router.put('/updatebook/:id', bookController.UpdateBook);
+router.post('/createbook', bookController.createBook);
+router.delete('/deletebook/:id', bookController.deleteBook);
+
+
+
 export default router;
