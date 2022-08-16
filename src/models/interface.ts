@@ -1,3 +1,6 @@
+
+
+
 export interface IRepository<T, D> {
   getAll: () => Promise<T[] | undefined>
   getById: (id: number) => Promise<T | undefined>
@@ -7,7 +10,11 @@ export interface IRepository<T, D> {
   total?:(params: Pagination) => Promise<number>
   create: (data: D) => Promise<T | undefined>
 }
-
+export interface IRepository2<T, D> {
+  getAll: () => Promise<T[] | undefined>
+  getById: (id: number) => Promise<T | undefined>
+  create: (data: D) => Promise<T | undefined>
+}
 export type Filter = Partial<{
   [key: string]: string
 }>
@@ -26,3 +33,5 @@ export type PaginateReturnType<T> = {
   lastPage: number
   filter?: string | Object
 }
+
+
