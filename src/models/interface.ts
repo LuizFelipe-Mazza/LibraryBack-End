@@ -1,4 +1,5 @@
 export interface IRepository<T, D> {
+  getAll: () => Promise<T[] | undefined>
   getById: (id: number) => Promise<T | undefined>
   update: (id: number, data: Partial<D>) => Promise<T>
   remove: (id: number) => Promise<void>

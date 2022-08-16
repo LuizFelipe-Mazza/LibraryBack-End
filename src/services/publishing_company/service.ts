@@ -19,6 +19,14 @@ export class PublishingService {
     return Publishing_company;
   }
 
+  async getAllPublish() {
+    let publish = await this.repository.getAll();
+    if (!publish) {
+      throw new HttpError({message:'Os Livros não foram encontrados', status:404})
+    }
+    return publish;
+  }
+
   async create(data:Partial<Publishing_company>){
     if(!data.city ||!data.state ||!data.road ||!data.number ||!data.telephone||!data.state||!data.discrict||!data.name){
       throw new HttpError({message:'Editora não Cadastrada', status:404})

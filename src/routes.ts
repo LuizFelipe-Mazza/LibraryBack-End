@@ -33,7 +33,8 @@ router.post('/createpublishingcompany', publishingCompanyController.createPublis
 router.delete('/deletepublishingcompany/:id', publishingCompanyController.deletePublishing_company);
 
 // Book Area
-router.get('/book/:id', bookController.Book);
+router.get('/book/:product_code', bookController.Book);
+router.get('/book', bookController.AllBook);
 router.put('/updatebook/:id', bookController.UpdateBook);
 router.post('/createbook', bookController.createBook);
 router.delete('/deletebook/:id', bookController.deleteBook);

@@ -2,12 +2,25 @@ import { Address } from './types'
 import db from '../../database'
 import { IRepository, Pagination } from '../interface'
 
-class AddressRepository implements IRepository<Address, any> {
+class AddressRepository implements IRepository<Address, Partial<Address>> {
+
   async getById(id: number): Promise<Address | undefined> {
     let address = undefined
     try {
       const addressFounded = await db
         .raw('SELECT * FROM address WHERE id = ?', [id])
+        .debug(true)
+      address = addressFounded[0][0]
+    } catch (e) {
+      console.error(e)
+    }
+    return address
+  }
+  async getAll(): Promise<Address[] | undefined> {
+    let address = undefined
+    try {
+      const addressFounded = await db
+        .raw('SELECT * FROM address')
         .debug(true)
       address = addressFounded[0][0]
     } catch (e) {

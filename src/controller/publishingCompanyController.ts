@@ -22,6 +22,20 @@ class Publishing_companyController {
     }
     return data
   }
+  async AllPublish(req: Request<Publishing_company>, res: Response): Promise<void> {
+    const service = new PublishingService(Publishing_company_Repository)
+    try {
+      let publish = await service.getAllPublish()
+
+      res.status(200).json(publish)
+    } catch (e) {
+      if (e instanceof HttpError) {
+        res.status(e.status).json(e.message)
+      }
+      console.error(e)
+      res.status(500).json('Erro Não Indentificado')
+    }
+  }
 
   async Publishing_company(req: Request<Publishing_company>, res: Response): Promise<void> {
     const { id } = req.params

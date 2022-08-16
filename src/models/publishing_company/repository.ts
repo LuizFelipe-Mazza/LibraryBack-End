@@ -16,6 +16,19 @@ class Publishing_company_Repository implements IRepository<Publishing_company, a
     return publishing_company
   }
 
+  async getAll(): Promise<Publishing_company[] | undefined> {
+    let publish = undefined
+    try {
+      const publishFounded = await db
+        .raw('SELECT * FROM books')
+        .debug(true)
+      publish = publishFounded[0][0]
+    } catch (e) {
+      console.error(e)
+    }
+    return publish
+  }
+
   async update(id: number, data: Partial<Publishing_company>): Promise<any> {
     let Publishing_company = undefined
     try {

@@ -17,7 +17,14 @@ export class AddressService {
     }
     return address;
   }
-
+  async getAll() {
+    let 
+    address = await this.repository.getAll();
+    if (!address) {
+      throw new HttpError({message:'Os Livros não foram encontrados', status:404})
+    }
+    return address;
+  }
   async create(data:Partial<Address>){
     if(!data.city ||!data.comp ||!data.street ||!data.number ||!data.zip_code||!data.state){
       throw new HttpError({message:'Endereço não Cadastrado', status:404})

@@ -16,6 +16,19 @@ class ProviderRepository implements IRepository<Provider, Partial<Provider>> {
     return provider
   }
 
+  async getAll(): Promise<Provider[] | undefined> {
+    let provider = undefined
+    try {
+      const providerFounded = await db
+        .raw('SELECT * FROM provider')
+        .debug(true)
+      provider = providerFounded[0][0]
+    } catch (e) {
+      console.error(e)
+    }
+    return provider
+  }
+
   async update(id: number, data: Partial<Provider>): Promise<any> {
     let provider = undefined
     try {

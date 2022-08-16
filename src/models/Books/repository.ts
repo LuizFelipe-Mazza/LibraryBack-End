@@ -7,7 +7,7 @@ class BookRepository implements IRepository<Book, any> {
     let Book = undefined
     try {
       const BookFounded = await db
-        .raw('SELECT * FROM book WHERE id = ?', [product_code])
+        .raw('SELECT * FROM books WHERE product_code = ?', [product_code])
         .debug(true)
       Book = BookFounded[0][0]
     } catch (e) {
@@ -15,13 +15,24 @@ class BookRepository implements IRepository<Book, any> {
     }
     return Book
   }
-
+  async getAll(): Promise<Book[] | undefined> {
+    let Book = undefined
+    try {
+      const BookFounded = await db
+        .raw('SELECT * FROM books')
+        .debug(true)
+      Book = BookFounded[0][0]
+    } catch (e) {
+      console.error(e)
+    }
+    return Book
+  }
   async update(product_code : number, data: Partial<Book>): Promise<any> {
     let Book = undefined
     try {
       const updateBook = await db
         .raw(
-          'UPDATE book SET authors = ?, illustradors  = ?, cover_image = ?, year_of_last_publication = ?,subject = ?,isbn= ?,book_number = ?, position_on_the_shelf = ?, name = ?, original_name = ?,name_translated = ?, number_of_pages = ?,summary = ? WHERE product_code = ?',
+          'UPDATE books SET authors = ?, illustradors  = ?, cover_image = ?, year_of_last_publication = ?,subject = ?,isbn= ?,book_number = ?, position_on_the_shelf = ?, name = ?, original_name = ?,name_translated = ?, number_of_pages = ?,summary = ? WHERE product_code = ?',
           [
             //seguir respectivamente conforme foi digitado no SET
             data.authors as string,
@@ -56,7 +67,7 @@ class BookRepository implements IRepository<Book, any> {
   async remove(product_code : number): Promise<void> {
     let Book: any = undefined
     try {
-      const deleteBook = db.raw('DELETE FROM book WHERE product_code  = ?', [product_code ])
+      const deleteBook = db.raw('DELETE FROM books WHERE product_code  = ?', [product_code ])
       //não precisa informar a posição dentro do array
       Book = deleteBook
     } catch (e) {
@@ -72,7 +83,7 @@ class BookRepository implements IRepository<Book, any> {
     let Book = undefined
     try {
       const createBook =
-        await db.raw(`INSERT INTO book ( authors, illustradors, cover_image, year_of_last_publication,subject,isbn,book_number, position_on_the_shelf, name, original_name,name_translated, number_of_pages,summary) 
+        await db.raw(`INSERT INTO books ( authors, illustradors, cover_image, year_of_last_publication,subject,isbn,book_number, position_on_the_shelf, name, original_name,name_translated, number_of_pages,summary) 
     VALUES('${data.authors}', '${data.illustrators}', '${data.cover_image}','${data.year_of_last_publication}','${data.subject}','${data.isbn}','${data.book_number}','${data.position_on_the_shelf}','${data.name}','${data.original_name}','${data.name_translated}','${data.number_of_pages}','${data.summary}')
 `)
       Book = createBook[0][0]

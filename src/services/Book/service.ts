@@ -18,6 +18,14 @@ export class BookService {
     return Book;
   }
 
+  async getAll() {
+    let Book = await this.repository.getAll();
+    if (!Book) {
+      throw new HttpError({message:'Os Livros não foram encontrados', status:404})
+    }
+    return Book;
+  }
+
   async create(data:Partial<Book>){
     if(!data.name_translated ||!data.original_name ||!data.name||!data.number_of_pages ||!data.summary||!data.authors||!data.illustrators||!data.cover_image||!data.year_of_last_publication||!data.subject||!data.isbn||!data.book_number||!data.position_on_the_shelf){
       throw new HttpError({message:'Livro não Cadastrado', status:404})

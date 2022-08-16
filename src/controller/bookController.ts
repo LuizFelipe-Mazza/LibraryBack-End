@@ -39,6 +39,21 @@ class BookController {
     }
   }
 
+  async AllBook(req: Request<Book>, res: Response): Promise<void> {
+    const service = new BookService(bookRepository)
+    try {
+      let Books = await service.getAll()
+
+      res.status(200).json(Books)
+    } catch (e) {
+      if (e instanceof HttpError) {
+        res.status(e.status).json(e.message)
+      }
+      console.error(e)
+      res.status(500).json('Erro Não Indentificado')
+    }
+  }
+
   async UpdateBook(
     req: Request<Book['product_code'], Book>,
     res: Response,

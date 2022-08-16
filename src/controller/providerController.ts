@@ -27,6 +27,20 @@ class providerController {
     }
   }
 
+  async AllProvider(req: Request<Provider>, res: Response): Promise<void> {
+    try {
+      let Providers = await service.getAll()
+
+      res.status(200).json(Providers)
+    } catch (e) {
+      if (e instanceof HttpError) {
+        res.status(e.status).json(e.message)
+      }
+      console.error(e)
+      res.status(500).json('Erro Não Indentificado')
+    }
+  }
+
   async UpdateProvider(req: Request<Provider>, res: Response): Promise<void> {
     const data = req.params
     const service = new ProviderService(ProviderRepository)

@@ -19,6 +19,16 @@ export class ProviderService {
     return provider
   }
 
+  async getAll() {
+    let 
+    provider = await this.repository.getAll();
+    if (!provider) {
+      throw new HttpError({message:'Os Livros não foram encontrados', status:404})
+    }
+    return provider;
+  }
+ 
+
   async update(data: Partial<Provider>) {
     if (
       !data.name ||

@@ -32,6 +32,15 @@ class UserRepository implements UInterface<IUser, Partial<IUser>> {
     return data
   }
 
+  async getAll(): Promise<IUser> {
+    const founded = await db
+      .select('*')
+      .from('user')
+     
+
+    return founded[0][0]
+  }
+
   async update(id: number, data: Partial<IUser>): Promise<IUser> {
     let dataUpdated: IUser | undefined = undefined
     try {
