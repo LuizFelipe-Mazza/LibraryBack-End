@@ -5,6 +5,8 @@ import providerController from './controller/providerController'
 import userController from './controller/userController'
 import bookController from './controller/bookController'
 import publishingCompanyController from './controller/publishingCompanyController'
+import itemSaleController from './controller/items_saleController'
+import saleController from './controller/saleController'
 
 const router = Router();
 router.get('/address/:id', addressController.address);
@@ -38,6 +40,14 @@ router.get('/book', bookController.AllBook);
 router.put('/updatebook/:id', bookController.UpdateBook);
 router.post('/createbook', bookController.createBook);
 router.delete('/deletebook/:id', bookController.deleteBook);
+
+// Item Sale Area
+router.get('/itemsale/:id', itemSaleController.itemSale);
+router.post('/createitemsale', itemSaleController.createitemSale);
+
+// Sale Area
+router.get('/sale/:id', saleController.sale);
+router.post('/createsale', saleController.createsale);
 
 
 
