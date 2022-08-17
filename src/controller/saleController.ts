@@ -1,5 +1,5 @@
 import { HttpError } from '../helpers/httpError'
-import { saleService } from 'services/sale/service'
+import { saleService } from '../services/sale/service'
 import { Request, Response } from 'express'
 import { sale, saleRepository } from '../models/sale'
 
