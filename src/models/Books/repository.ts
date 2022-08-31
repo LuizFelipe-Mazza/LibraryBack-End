@@ -21,7 +21,7 @@ class BookRepository implements IRepository<Book, any> {
       const BookFounded = await db
         .raw('SELECT * FROM books')
         .debug(true)
-      Book = BookFounded[0][0]
+      Book = BookFounded[0]
     } catch (e) {
       console.error(e)
     }
