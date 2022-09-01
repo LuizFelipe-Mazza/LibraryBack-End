@@ -2,15 +2,20 @@ import { HttpError } from '../helpers/httpError'
 import { saleService } from '../services/sale/service'
 import { Request, Response } from 'express'
 import { sale, saleRepository } from '../models/sale'
+import itemSaleRepository from '../models/item_sale/repository'
+import { itemSaleService } from '../services/itemSale/service'
 
 
 class saleController {
+
   async createsale(req: Request<sale>, res: Response): Promise<void> {
-    const service = new saleService(saleRepository)
+    const service = new saleService(saleRepository);
+    const itemService = new itemSaleService(itemSaleRepository);
     const data = req.body
 
     try {
-      await service.create(data)
+     const idSale =  await service.create(data)
+     data.products.forEach(async product => {await itemService.create(Number(idSale),product)})
       res.status(200).json('Compra realizada com sucesso')
     } catch (e) {
       if (e instanceof HttpError) {

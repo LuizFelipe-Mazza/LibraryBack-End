@@ -13,7 +13,12 @@ export interface IRepository<T, D> {
 export interface IRepository2<T, D> {
   getAll: () => Promise<T[] | undefined>
   getById: (id: number) => Promise<T | undefined>
-  create: (data: D) => Promise<T | undefined>
+  create: (data: D) => Promise<T | undefined | number>
+}
+export interface IRepository3<T, D> {
+  getAll: () => Promise<T[] | undefined>
+  getById: (id: number) => Promise<T | undefined>
+  create: (id:number, data: D) => Promise<T | undefined>
 }
 export type Filter = Partial<{
   [key: string]: string

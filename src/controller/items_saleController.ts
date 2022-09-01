@@ -9,9 +9,10 @@ class itemSaleController {
   async createitemSale(req: Request<itemSale>, res: Response): Promise<void> {
     const service = new itemSaleService(itemSaleRepository)
     const data = req.body
+    const {id} = req.params
 
     try {
-      await service.create(data)
+      await service.create(id,data)
       res.status(200).json('item adicionado com sucesso')
     } catch (e) {
       if (e instanceof HttpError) {

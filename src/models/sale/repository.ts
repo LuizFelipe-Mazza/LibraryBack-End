@@ -1,10 +1,8 @@
-import { IRepository2 } from './../interface';
+import { IRepository2 } from './../interface'
 import { sale } from './types'
 import db from '../../database'
 
-
 class saleRepository implements IRepository2<sale, Partial<sale>> {
-
   async getById(id: number): Promise<sale | undefined> {
     let sale = undefined
     try {
@@ -20,9 +18,7 @@ class saleRepository implements IRepository2<sale, Partial<sale>> {
   async getAll(): Promise<sale[] | undefined> {
     let sale = undefined
     try {
-      const saleFounded = await db
-        .raw('SELECT * FROM sale')
-        .debug(true)
+      const saleFounded = await db.raw('SELECT * FROM sale').debug(true)
       sale = saleFounded[0][0]
     } catch (e) {
       console.error(e)
@@ -30,18 +26,17 @@ class saleRepository implements IRepository2<sale, Partial<sale>> {
     return sale
   }
 
-  async create(data: Partial<sale>): Promise<sale | undefined> {
-    let sale = undefined
+  async create(data: Partial<sale | undefined>): Promise<sale | undefined> {
+    let sale: any = undefined
     try {
-      const createsale =
-        await db.raw(`INSERT INTO sale ( city, comp, zip_code, street, number, state)
-    VALUES('${data.id_user}', '${data.id_address}', '${data.total_sale}','${data.payment_type}')
+      const createsale = await db.raw(`INSERT INTO sale (total_sale)
+    VALUES( '${data?.total_sale}')
     `)
-      sale = createsale[0][0]
+      sale = createsale[0]
     } catch (e) {
       console.error(e)
     }
-    return sale
+    return sale?.insertId ?? null
   }
 }
 export default new saleRepository()

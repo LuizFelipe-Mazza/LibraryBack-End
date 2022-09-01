@@ -1,12 +1,12 @@
 import { itemSale } from 'models/item_sale/types';
 
 import {HttpError} from '../../helpers/httpError';
-import { IRepository2 } from '../../models/interface';
+import { IRepository3 } from '../../models/interface';
 
 export class itemSaleService {
-  private repository: IRepository2<itemSale, Partial<itemSale>>
+  private repository: IRepository3<itemSale, Partial<itemSale>>
 
-  constructor(repository: IRepository2<itemSale, Partial<itemSale>>) {
+  constructor(repository: IRepository3<itemSale, Partial<itemSale>>) {
     this.repository = repository
   }
 
@@ -25,11 +25,12 @@ export class itemSaleService {
     }
     return itemSale;
   }
-  async create(data:Partial<itemSale>){
-    if(!data.id_sale||!data.id_book ||!data.price){
+  async create(id:number, data:Partial<itemSale>){
+    if(!data.id_book ||!data.price){
       throw new HttpError({message:'Compra não Cadastrada', status:404})
     }
-   await this.repository.create(data);
+    console.log('cheguei aqui')
+   await this.repository.create(id, data);
   }
 
   
